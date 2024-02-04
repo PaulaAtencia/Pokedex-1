@@ -1,0 +1,357 @@
+/* Fuentes */
+@font-face {
+    font-family: 'Gellisto';
+    src: url("fonts/gellisto.ttf");
+}
+
+@font-face {
+    font-family: 'Jackson';
+    src: url("fonts/jackson.ttf");
+}
+
+@font-face {
+    font-family: 'Mermaid';
+    src: url("fonts/mermaid.ttf");
+}
+
+@font-face {
+    font-family: 'Good';
+    src: url("fonts/good.ttf");
+}
+
+header {
+    background-color: #6b1b1b;
+    border-bottom: 5px solid #000000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+@media screen and (max-width: 768px) {
+    header {
+        border-bottom: 2px solid #000000;
+        /* Reducir el porcentaje del borde */
+    }
+}
+
+/* Logo */
+header img {
+    width: 25%;
+    vertical-align: middle;
+    display: inline-block;
+    min-width: 262px;
+    /* Límite mínimo del tamaño del logo */
+}
+
+body {
+    background-size: 100%;
+    /* Ajusta la imagen al tamaño del contenedor */
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+
+body.modo-claro {
+    background-image: url("images/bg-light.jpg");
+}
+
+body.modo-oscuro {
+    background-image: url("images/bg-dark.jpg");
+}
+
+@media screen and (max-width: 1700px){
+    
+    body
+    {
+        background-size: cover;
+    }
+}
+
+
+/* Contenedor del botón de modo, buscador y la lista */
+#contenedor-pokedex {
+    padding: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+#contenedor-modo {
+    margin-right: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#boton-modo {
+    box-sizing: border-box;
+    background-color: #b0abb7;
+
+    padding: 5px;
+    border: 2px solid #000000;
+    border-radius: 10px;
+    margin-right: 10px;
+    margin-bottom: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 1);
+
+    width: 60px;
+}
+
+/* Botón del modo oscuro */
+#imagen-modo {
+    cursor: pointer;
+    width: 50px;
+
+}
+
+#contenedor-buscador {
+    margin-bottom: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+}
+
+#buscador {
+    margin-bottom: 10px;
+    padding: 10px;
+    border: 2px solid #ccc;
+    border-radius: 5px;
+    font-family: "Mermaid";
+
+    outline: none;
+    width: 300px;
+    /* Ajusta el ancho */
+    transition: border-color 0.3s ease;
+    /* Efecto de transición */
+}
+
+#buscador:focus {
+    border-color: #007BFF;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+#buscador.sinResultados {
+    border: 2px solid #e20707;
+    box-shadow: 0 0 5px rgba(174, 17, 17, 0.5);
+}
+
+#buscador.conResultados {
+    border: 2px solid #168005;
+    box-shadow: 0 0 5px rgba(1, 105, 8, 0.5);
+}
+
+
+#icono-lupa {
+    width: 40px;
+    margin-bottom: 10px;
+    cursor: pointer;
+}
+
+#contenedor-lista {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#lista-pokemons {
+    width: 1080px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+}
+
+.contenedor-elemento {
+    box-sizing: border-box;
+    padding: 5px;
+    border-radius: 30px;
+    margin-right: 10px;
+    margin-bottom: 20px;
+
+    width: 235px;
+    max-width: 235px;
+    min-width: 235px;
+}
+
+.contenedor-elemento.modo-oscuro {
+    box-shadow: 0 0 10px rgb(255, 255, 255);
+    border: 2px solid #FFFFFF;
+    background-color: #000000;
+}
+
+.contenedor-elemento.modo-claro {
+    box-shadow: 0 0 10px rgba(0, 0, 0, 1);
+    border: 2px solid #000000;
+    background-color: #FFFFFF;
+
+}
+
+@media screen and (max-width: 1024px) {
+    #lista-pokemons {
+        width: 780px;
+        /* Máximo 3 elementos por fila */
+    }
+}
+
+@media screen and (max-width: 770px) {
+    #lista-pokemons {
+        width: 500px;
+        /* Máximo 2 elementos por fila */
+    }
+}
+
+@media screen and (max-width: 572px) {
+    #lista-pokemons {
+        width: 270px;
+        /* Máximo 1 elemento por fila */
+    }
+}
+
+/* Imagen del elemento */
+.contenedor-elemento>a {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+
+/* Número del pokémon */
+.contenedor-numero {
+    margin-left: 15px;
+    font-family: 'Good';
+    font-size: 14px;
+}
+
+.contenedor-numero.modo-claro {
+    color: #000000;
+}
+
+.contenedor-numero.modo-oscuro {
+    color: #FFFFFF;
+}
+
+
+/* Nombre del pokémon */
+.contenedor-nombre {
+    margin-left: 15px;
+    font-family: 'Mermaid';
+    font-size: 24px;
+}
+
+.contenedor-nombre.modo-claro {
+    color: #000000;
+}
+
+.contenedor-nombre.modo-oscuro {
+    color: #FFFFFF;
+}
+
+
+/* Todos los tipos del pokémon */
+.contenedor-tipos {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Un tipo específico del pokémon */
+.contenedor-tipo {
+    border-radius: 25px;
+    margin: 10px;
+    min-width: 30%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Texto del tipo */
+.contenedor-texto-tipo {
+    font-size: 16px;
+    font-family: 'Mermaid';
+    color: #FFFFFF;
+}
+
+/* Colores de los contenedores de cada tipo */
+.Normal {
+    background-color: #626262;
+}
+
+.Lucha {
+    background-color: #B96B17;
+}
+
+.Volador {
+    background-color: #BCDCF4;
+}
+
+.Veneno {
+    background-color: #9A4FD4;
+}
+
+.Tierra {
+    background-color: #9B6434;
+}
+
+.Roca {
+    background-color: #C7BE8E;
+}
+
+.Bicho {
+    background-color: #5FA21E;
+}
+
+.Fantasma {
+    background-color: #410C50;
+}
+
+.Acero {
+    background-color: #4F8092;
+}
+
+.Fuego {
+    background-color: #7B0808;
+}
+
+.Agua {
+    background-color: #1E56A2;
+}
+
+.Planta {
+    background-color: #0DB100;
+}
+
+.Eléctrico {
+    background-color: #FFBB00;
+}
+
+.Psíquico {
+    background-color: #FF24B0;
+}
+
+.Hielo {
+    background-color: #6DF2FF;
+}
+
+.Dragón {
+    background-color: #071760;
+}
+
+.Siniestro {
+    background-color: #4E3E3D;
+}
+
+.Hada {
+    background-color: #B236C3;
+}
+
+.mensaje-error {
+    font-family: "Mermaid";
+    font-size: 28px;
+    color: #e40404;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+}
