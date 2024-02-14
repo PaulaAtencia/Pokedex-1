@@ -1,56 +1,73 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="styles.css">
-        <link rel="icon" href="images/pokeball.ico" type="image/x-icon">
-        <title>Pokédex</title>
-    </head>
 
-    <body>
-        <header>
-            <!-- Contenido del encabezado de página -->
-            <img src="images/logo.png"/>
-        </header>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" href="images/pokeball.ico" type="image/x-icon">
+    <title>Pokédex</title>
+</head>
 
-        <main>
-            <!-- Contenido principal de la página -->
-            <div id="contenedor-pokedex">
+<body>
+    <header>
+        <!-- Contenido del encabezado de página -->
+        <img src="images/logo.png"/>
+    </header>
 
-                <section id="contenedor-modo">
-                    <!-- Aquí es donde está el botón del cambio de modo -->
-                    <div id="boton-modo">
-                        <img src="images/day-night.png" id="imagen-modo"/>
-                    </div>
-                    
-                </section>
+    <main>
+        <!-- Contenido principal de la página -->
 
-                <section id="contenedor-buscador">
-                    <!-- Aquí es donde está el buscador -->
-                    <input type="text" id="buscador" placeholder="Buscar por nombre">
-                    <img src="images/lupa.png" id="icono-lupa"/>
+        <div id="contenedor-barra-superior">
 
-                </section>
-
-                <section id="contenedor-lista">
-                    <!-- Aquí es donde aparece la lista con los pokémon -->
-                    <div id="lista-pokemons"></div>
-
-                    
-                </section>
-
+            <div id="contenedor-modo">
+                <!-- Aquí es donde está el botón del cambio de modo -->
+                <div id="boton-modo">
+                    <img src="images/day-night.png" id="imagen-modo" />
+                </div>
             </div>
-        </main>
-        
-        <footer>
-            <!-- Contenido del pie de página -->
 
-        </footer>
-        <script src="list-manager.js"></script>
-        <script src="theme-manager.js"></script> 
-    </body>
+            <div id="contenedor-buscador">
+                <!-- Aquí es donde está el buscador -->
+                <input type="text" id="buscador" placeholder="Buscar por nombre">
+                <img src="images/lupa.png" id="icono-lupa" />
+            </div>
 
-    
+            <div id="contenedor-filtro-tipos">
+                <!-- Aquí es donde está el filtro para los tipos de los pokémon -->
+                <div id="filtro">
+                    
+                </div>
+            </div>
+        </div>
+
+
+        <div id="contenedor-pokedex">
+            <section id="contenedor-lista">
+                <!-- Aquí es donde aparece la lista con los pokémon -->
+                <div id="lista-pokemons"></div>
+            </section>
+        </div>
+
+
+        <div id="contenedor-flecha-abajo">
+            <img src="images/flecha-abajo.png" />
+        </div>
+
+        <div id="contenedor-flecha-arriba">
+            <img src="images/flecha-arriba.png" />
+        </div>
+
+
+    </main>
+
+    <footer>
+        <!-- Contenido del pie de página -->
+
+    </footer>
+    <script src="script.js"></script>
+</body>
+
+
 
 </html>

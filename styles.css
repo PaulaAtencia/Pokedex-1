@@ -39,7 +39,7 @@ header img {
     width: 25%;
     vertical-align: middle;
     display: inline-block;
-    min-width: 262px;
+    min-width: 230px;
     /* Límite mínimo del tamaño del logo */
 }
 
@@ -67,54 +67,71 @@ body.modo-oscuro {
     }
 }
 
+/* Contiene el buscador y el botón del modo oscuro */
+#contenedor-barra-superior {
+    top: 0px;
+    left: 50%;
+    position: sticky;
+    
 
-/* Contenedor del botón de modo, buscador y la lista */
-#contenedor-pokedex {
-    padding: 30px;
     display: flex;
     justify-content: center;
+    text-align: center;
     align-items: center;
-    flex-direction: column;
+    flex-direction: row;
+
+    width: 100%;
+    height: 70px;
+    background-color: #670000;
+    border-bottom: 2px solid #000000;
 }
 
+/* Contiene el botón del modo oscuro */
 #contenedor-modo {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    margin-left: 10px;
     margin-right: auto;
+
     display: flex;
     justify-content: center;
     align-items: center;
+    width: 50px;
+
 }
 
 #boton-modo {
     box-sizing: border-box;
     background-color: #b0abb7;
 
-    padding: 5px;
-    border: 2px solid #000000;
-    border-radius: 10px;
-    margin-right: 10px;
-    margin-bottom: 20px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 1);
-
-    width: 60px;
-}
-
-/* Botón del modo oscuro */
-#imagen-modo {
-    cursor: pointer;
-    width: 50px;
-
-}
-
-#contenedor-buscador {
-    margin-bottom: 30px;
     display: flex;
     justify-content: center;
     align-items: center;
-    flex-direction: row;
+
+    padding: 5px;
+    border: 2px solid #000000;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 1);
+    width: 40px;
+}
+
+#imagen-modo {
+    cursor: pointer;
+    width: 30px;
+    height: 30px;
+    margin: 5px;
+}
+
+#contenedor-buscador {
+    display: flex;
+    justify-content: center;
+    align-self: center;
+    margin: auto;
+    
 }
 
 #buscador {
-    margin-bottom: 10px;
+    margin: 10px;
     padding: 10px;
     border: 2px solid #ccc;
     border-radius: 5px;
@@ -122,31 +139,60 @@ body.modo-oscuro {
 
     outline: none;
     width: 300px;
-    /* Ajusta el ancho */
-    transition: border-color 0.3s ease;
-    /* Efecto de transición */
+    transition: border-color 0.3s ease; /* Efecto de transición */
 }
-
-#buscador:focus {
-    border-color: #007BFF;
-    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
-}
-
-#buscador.sinResultados {
-    border: 2px solid #e20707;
-    box-shadow: 0 0 5px rgba(174, 17, 17, 0.5);
-}
-
-#buscador.conResultados {
-    border: 2px solid #168005;
-    box-shadow: 0 0 5px rgba(1, 105, 8, 0.5);
-}
-
 
 #icono-lupa {
     width: 40px;
     margin-bottom: 10px;
+    margin-top: 10px;
+    margin-right: 10px;
     cursor: pointer;
+}
+
+@media screen and (max-width: 380px) 
+{
+    #buscador 
+    {
+        width: 230px;
+    }
+}
+
+#buscador:focus {
+    border-color: #007BFF;
+    box-shadow: 0 0 20px rgba(0, 123, 255, 0.8);
+}
+
+#buscador.sinResultados {
+    border: 2px solid #e20707;
+    box-shadow: 0 0 20px rgba(174, 17, 17, 0.8);
+}
+
+#buscador.conResultados {
+    border: 2px solid #168005;
+    box-shadow: 0 0 20px rgba(1, 105, 8, 0.8);
+}
+
+#contenedor-filtro-tipos {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    margin-left: auto;
+    margin-right: 10px;
+    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 50px;
+}
+
+
+/* Contenedor de la lista */
+#contenedor-pokedex {
+    padding: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
 }
 
 #contenedor-lista {
@@ -188,21 +234,21 @@ body.modo-oscuro {
 
 }
 
-@media screen and (max-width: 1024px) {
+@media screen and (max-width: 1100px) {
     #lista-pokemons {
         width: 780px;
         /* Máximo 3 elementos por fila */
     }
 }
 
-@media screen and (max-width: 770px) {
+@media screen and (max-width: 860px) {
     #lista-pokemons {
         width: 500px;
         /* Máximo 2 elementos por fila */
     }
 }
 
-@media screen and (max-width: 572px) {
+@media screen and (max-width: 620px) {
     #lista-pokemons {
         width: 270px;
         /* Máximo 1 elemento por fila */
@@ -274,6 +320,7 @@ body.modo-oscuro {
     font-size: 16px;
     font-family: 'Mermaid';
     color: #FFFFFF;
+    text-shadow: 2px 2px 3px rgba(0, 0, 0, 0.95);
 }
 
 /* Colores de los contenedores de cada tipo */
@@ -286,7 +333,7 @@ body.modo-oscuro {
 }
 
 .Volador {
-    background-color: #BCDCF4;
+    background-color: #84B1D4;
 }
 
 .Veneno {
@@ -352,6 +399,40 @@ body.modo-oscuro {
 .mensaje-error {
     font-family: "Mermaid";
     font-size: 28px;
-    color: #e40404;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+    color: #ff0000;
+    text-shadow: 1px 1px 1px rgb(0, 0, 0);
+    -webkit-text-stroke: 0.5px #000000;
+}
+
+#contenedor-flecha-abajo {
+    width: 50px;
+    position: fixed;
+    right: 2px;
+    bottom: 1px;
+}
+
+
+#contenedor-flecha-arriba {
+    width: 50px;
+    position: fixed;
+    right: 2px;
+    bottom: 65px;
+    display: none;  /* Al principio no aparece */
+}
+
+#contenedor-flecha-arriba img,
+#contenedor-flecha-abajo img {
+    width: 50px;
+    cursor: pointer;
+}
+
+@media screen and (max-width: 400px)
+{
+    #contenedor-flecha-arriba img,
+    #contenedor-flecha-abajo img,
+    #contenedor-flecha-arriba,
+    #contenedor-flecha-abajo 
+    {
+        width: 30px;
+    }
 }

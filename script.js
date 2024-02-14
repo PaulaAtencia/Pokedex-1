@@ -1,8 +1,7 @@
+/* GESTIÓN DE LA LISTA DE POKÉMONS */
+
 // Array con los datos de los pokémon
 const datosPokemon = [];
-
-// Indica que la lista está creada
-var listaCreada = false;
 
 // Función para cargar la lista de Pokémon
 async function cargarTodosPokemon() 
@@ -17,8 +16,10 @@ async function cargarTodosPokemon()
 
 // Función hecha al inicio de cargar la página (carga todos los pokémon en la lista)
 document.addEventListener(`DOMContentLoaded`, async function () {
+
     await cargarTodosPokemon();
     mostrarPokemonList(datosPokemon);
+
 });
 
 const buscador = document.getElementById(`buscador`);
@@ -26,12 +27,8 @@ const buscador = document.getElementById(`buscador`);
 buscador.addEventListener(`input`, async function(event) {
 
     const busqueda = event.target.value.trim();
-    filtrarListaPorNombre(busqueda);
-
-    while (!listaCreada) 
-    {
-        await esperar(8); // Esperar 100 milisegundos antes de verificar de nuevo
-    }
+    
+    await filtrarListaPorNombre(busqueda);
 
     verificarModo();
 });
@@ -71,8 +68,6 @@ async function filtrarListaPorNombre(busqueda)
 // Crea la lista con los pokémon que se les pasa por datos
 async function mostrarPokemonList(datos) {
 
-    listaCreada = false;
-
     // Obtener la referencia del elemento ul
     var lista = document.getElementById(`lista-pokemons`);
 
@@ -83,7 +78,7 @@ async function mostrarPokemonList(datos) {
     for (var i = 0; i < datos.length; i++) {
 
         // Calculamos el string adaptado a 3 cifras del número del pokémon
-        var numeroPokemon = String(datos[i].id).padStart(3, '0');
+        var numeroPokemon = String(datos[i].id).padStart(3, `0`);
 
         // Crear un nuevo elemento
         var nuevoElemento = document.createElement(`div`);
@@ -177,7 +172,8 @@ async function mostrarPokemonList(datos) {
         lista.appendChild(mensajeError);
     }
 
-    listaCreada = true;
+    verificarModo(); // Revisa el modo claro/oscuro para la lista
+    controlFlechas(); // Revisa la aparición de las flechas
 }
 
 // Obtiene los datos de un pokemon pasando su id o su nombre
@@ -240,3 +236,152 @@ async function traducirTipo(tipo) {
             return ``;
     }
 }
+
+/***********************************************************************************************************/
+/* GESTIÓN DEL MODO CLARO Y OSCURO */
+
+document.addEventListener(`DOMContentLoaded`, async function () {
+
+    var boton = document.getElementById(`imagen-modo`);
+
+    boton.addEventListener(`click`, cambiarModo);
+
+    // Verificar el modo actual al cargar la página
+    verificarModo();
+});
+
+// Función para simular un tiempo de espera
+function esperar(ms) 
+{
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+function cambiarModo() 
+{
+    var body = document.body;
+    var pokemons = Array.from(document.getElementsByClassName(`contenedor-elemento`));
+
+    // Obtener el estado actual del modo
+    var modoActual = body.classList.contains(`modo-oscuro`);
+
+    if (modoActual) 
+    {
+        body.classList.remove(`modo-oscuro`);
+        body.classList.add(`modo-claro`);
+
+        pokemons.forEach(pokemon => {
+            pokemon.classList.remove(`modo-oscuro`);
+            pokemon.classList.add(`modo-claro`);
+            pokemon.querySelector(`:nth-child(2)`).classList.add(`modo-claro`);
+            pokemon.querySelector(`:nth-child(2)`).classList.remove(`modo-oscuro`);
+            pokemon.querySelector(`:nth-child(3)`).classList.add(`modo-claro`);
+            pokemon.querySelector(`:nth-child(3)`).classList.remove(`modo-oscuro`);
+        });
+
+    } 
+    else 
+    {
+        body.classList.remove(`modo-claro`);
+        body.classList.add(`modo-oscuro`);
+
+        pokemons.forEach(pokemon => {
+            pokemon.classList.add(`modo-oscuro`);
+            pokemon.classList.remove(`modo-claro`);
+            pokemon.querySelector(`:nth-child(2)`).classList.remove(`modo-claro`);
+            pokemon.querySelector(`:nth-child(2)`).classList.add(`modo-oscuro`);
+            pokemon.querySelector(`:nth-child(3)`).classList.remove(`modo-claro`);
+            pokemon.querySelector(`:nth-child(3)`).classList.add(`modo-oscuro`);
+        });
+    }
+
+    //
+    const modoActualizado = body.classList.contains(`modo-oscuro`);
+
+    // Almacenar el estado actual en localStorage
+    localStorage.setItem(`modo-oscuro-activado`, modoActualizado);
+}
+
+function verificarModo() 
+{
+    var body = document.body;
+    var pokemons = Array.from(document.getElementsByClassName(`contenedor-elemento`));
+
+    // Verificar si el modo oscuro está activo en localStorage
+    var modoGuardado = localStorage.getItem(`modo-oscuro-activado`);
+
+    // Si es la primera vez
+    if(modoGuardado === null)
+    {
+        localStorage.setItem(`modo-oscuro-activado`, false);
+        modoGuardado = localStorage.getItem(`modo-oscuro-activado`);
+    }
+
+    if (modoGuardado === `true`) 
+    {
+        body.classList.add(`modo-oscuro`);
+
+        pokemons.forEach(pokemon => {
+            pokemon.classList.add(`modo-oscuro`);
+            pokemon.querySelector(`:nth-child(2)`).classList.add(`modo-oscuro`);
+            pokemon.querySelector(`:nth-child(3)`).classList.add(`modo-oscuro`);
+        });
+    } 
+    else 
+    {
+        body.classList.add(`modo-claro`);
+
+        pokemons.forEach(pokemon => {
+            pokemon.classList.add(`modo-claro`);
+            pokemon.querySelector(`:nth-child(2)`).classList.add(`modo-claro`);
+            pokemon.querySelector(`:nth-child(3)`).classList.add(`modo-claro`);
+        });
+    }
+}
+
+/***********************************************************************************************************/
+/* GESTIÓN DE LAS FLECHAS */
+
+// Imagen que te envía al fondo de la lista
+const flechaAbajo = document.getElementById(`contenedor-flecha-abajo`);
+// Función que realiza la acción al clickear la imagen
+flechaAbajo.addEventListener(`click`, function() {
+    window.scrollTo({top: document.body.scrollHeight, behavior: `smooth`});
+});
+
+// Imagen que te envía al inicio de la lista
+const flechaArriba = document.getElementById(`contenedor-flecha-arriba`);
+// Función que realiza la acción al clickear la imagen
+flechaArriba.addEventListener(`click`, function() {
+    window.scrollTo({top: 0, behavior: `smooth`});
+});
+
+// Función para mostrar/ocultar las flechas según la posición donde estás en la página
+function controlFlechas() 
+{
+    //La flecha que desciende hasta abajo no sale si estás en la parte más baja
+    if (window.scrollY < (document.body.offsetHeight - window.innerHeight)) 
+    {
+        // Se muestra
+        flechaAbajo.style.display = `block`;
+    } 
+    else 
+    {
+        // Se oculta
+        flechaAbajo.style.display = `none`;
+    }
+
+    // La flecha que sube hasta arriba no sale si estas en la parte más alta
+    if (window.scrollY > 8) 
+    {
+        // Se muestra
+        flechaArriba.style.display = `block`;
+    } 
+    else 
+    {
+        // Se oculta
+        flechaArriba.style.display = `none`;
+    }
+}
+
+// La acción de scroll activa la función
+window.addEventListener(`scroll`, controlFlechas);
