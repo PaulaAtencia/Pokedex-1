@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="stylesIndex.css">
     <link rel="icon" href="images/pokeball.ico" type="image/x-icon">
     <title>Pokédex</title>
 </head>
@@ -45,7 +45,10 @@
         <div id="contenedor-pokedex">
             <section id="contenedor-lista">
                 <!-- Aquí es donde aparece la lista con los pokémon -->
-                <div id="lista-pokemons"></div>
+                <div id="lista-pokemons">
+                    <!-- Imagen por defecto de carga de la lista -->
+                    <img src="images/mewloading.gif" width="250px"/>
+                </div>
             </section>
         </div>
 
@@ -63,11 +66,8 @@
 
     <footer>
         <!-- Contenido del pie de página -->
-
+        <script src="scriptGeneral.js"></script>
+        <script src="scriptIndex.js"></script>
     </footer>
-    <script src="script.js"></script>
 </body>
-
-
-
 </html>

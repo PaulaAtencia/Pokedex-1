@@ -6,7 +6,7 @@ const datosPokemon = [];
 // Función para cargar la lista de Pokémon
 async function cargarTodosPokemon() {
     // Cargar y guardar los datos de los 151 Pokémon
-    for (let i = 1; i <= 151; i++) {
+    for (let i = 1; i <= 493; i++) {
         datosPokemon.push(await getPokemon(i));
     }
 }
@@ -14,13 +14,13 @@ async function cargarTodosPokemon() {
 
 // Función hecha al inicio de cargar la página (carga todos los pokémon en la lista)
 document.addEventListener(`DOMContentLoaded`, async function () {
-
     await cargarTodosPokemon();
     await mostrarPokemonList(datosPokemon);
-
+    buscador.value = ``; // Limpiar búsqueda previa
 });
 
 const buscador = document.getElementById(`buscador`);
+
 // Función que se hace al usar el buscador, hace que solo aparezcan los pokémon que contengan el texto indicado
 buscador.addEventListener(`input`, async function (event) {
 
@@ -35,7 +35,7 @@ buscador.addEventListener(`input`, async function (event) {
 // Función que filtra los pokémon que empiezan por el string dado
 async function filtrarListaPorNombre(busqueda) {
     let listaFiltrada = datosPokemon.filter(function (pokemon) {
-        return pokemon.forms[0].name.toLowerCase().includes(busqueda.toLowerCase());
+        return pokemon.name.toLowerCase().includes(busqueda.toLowerCase());
     });
 
     mostrarPokemonList(listaFiltrada);
@@ -82,7 +82,12 @@ async function mostrarPokemonList(datos) {
 
         // Creamos el enlace clickeable de la imagen
         let urlImagen = document.createElement(`a`);
-        urlImagen.href = ``;
+        // Hacemos que el enlace lleve a la segunda vista
+        urlImagen.href = `pokemon.html`;
+        // Hacemos que el enlace guarde el número del pokémon para que sepa qué cargar la segunda vista
+        urlImagen.addEventListener(`click`, function() {
+            guardarNumeroPokemon(datos[i].id);
+        });
         // Creamos la imagen del pokémon
         let imagen = document.createElement(`img`);
         imagen.src = `https://assets.pokemon.com/assets/cms2/img/pokedex/detail/${numeroPokemon}.png`;
@@ -181,6 +186,13 @@ async function mostrarPokemonList(datos) {
     });
 }
 
+// Manda al localStorage el número pokémon que cargará en la segunda vista
+function guardarNumeroPokemon(num)
+{
+    // Guardar número en localStorage
+    localStorage.setItem(`numeroPokemonSeleccionado`, num);
+}
+
 // Obtiene los datos de un pokemon pasando su id o su nombre
 async function getPokemon(id) {
     const pokemon = await getData(`https://pokeapi.co/api/v2/pokemon/${id}`);
@@ -188,14 +200,9 @@ async function getPokemon(id) {
 }
 
 async function getData(url) {
-    const response = await fetch(url);
-
-    if (!response.ok) {
-        throw new Error(`Error al obtener datos: ${response.status} ${response.statusText}`);
-    }
-
-    const data = await response.json();
-    return data;
+    const respuesta = await fetch(url);
+    const datos = await respuesta.json();
+    return datos;
 }
 
 // Traduce el tipo de un pokémon al español
@@ -238,95 +245,7 @@ async function traducirTipo(tipo) {
         case `fairy`:
             return `Hada`;
         default:
-            return ``;
-    }
-}
-
-/***********************************************************************************************************/
-/* GESTIÓN DEL MODO CLARO Y OSCURO */
-
-document.addEventListener(`DOMContentLoaded`, async function () {
-
-    let boton = document.getElementById(`imagen-modo`);
-
-    boton.addEventListener(`click`, cambiarModo);
-
-    // Verificar el modo actual al cargar la página
-    verificarModo();
-});
-
-function cambiarModo() {
-    let body = document.body;
-    let pokemons = Array.from(document.getElementsByClassName(`contenedor-elemento`));
-
-    // Obtener el estado actual del modo
-    let modoActual = body.classList.contains(`modo-oscuro`);
-
-    if (modoActual) {
-        body.classList.remove(`modo-oscuro`);
-        body.classList.add(`modo-claro`);
-
-        pokemons.forEach(pokemon => {
-            pokemon.classList.remove(`modo-oscuro`);
-            pokemon.classList.add(`modo-claro`);
-            pokemon.querySelector(`:nth-child(2)`).classList.add(`modo-claro`);
-            pokemon.querySelector(`:nth-child(2)`).classList.remove(`modo-oscuro`);
-            pokemon.querySelector(`:nth-child(3)`).classList.add(`modo-claro`);
-            pokemon.querySelector(`:nth-child(3)`).classList.remove(`modo-oscuro`);
-        });
-
-    }
-    else {
-        body.classList.remove(`modo-claro`);
-        body.classList.add(`modo-oscuro`);
-
-        pokemons.forEach(pokemon => {
-            pokemon.classList.add(`modo-oscuro`);
-            pokemon.classList.remove(`modo-claro`);
-            pokemon.querySelector(`:nth-child(2)`).classList.remove(`modo-claro`);
-            pokemon.querySelector(`:nth-child(2)`).classList.add(`modo-oscuro`);
-            pokemon.querySelector(`:nth-child(3)`).classList.remove(`modo-claro`);
-            pokemon.querySelector(`:nth-child(3)`).classList.add(`modo-oscuro`);
-        });
-    }
-
-    //
-    const modoActualizado = body.classList.contains(`modo-oscuro`);
-
-    // Almacenar el estado actual en localStorage
-    localStorage.setItem(`modo-oscuro-activado`, modoActualizado);
-}
-
-function verificarModo() {
-    let body = document.body;
-    let pokemons = Array.from(document.getElementsByClassName(`contenedor-elemento`));
-
-    // Verificar si el modo oscuro está activo en localStorage
-    let modoGuardado = localStorage.getItem(`modo-oscuro-activado`);
-
-    // Si es la primera vez
-    if (modoGuardado === null) {
-        localStorage.setItem(`modo-oscuro-activado`, false);
-        modoGuardado = localStorage.getItem(`modo-oscuro-activado`);
-    }
-
-    if (modoGuardado === `true`) {
-        body.classList.add(`modo-oscuro`);
-
-        pokemons.forEach(pokemon => {
-            pokemon.classList.add(`modo-oscuro`);
-            pokemon.querySelector(`:nth-child(2)`).classList.add(`modo-oscuro`);
-            pokemon.querySelector(`:nth-child(3)`).classList.add(`modo-oscuro`);
-        });
-    }
-    else {
-        body.classList.add(`modo-claro`);
-
-        pokemons.forEach(pokemon => {
-            pokemon.classList.add(`modo-claro`);
-            pokemon.querySelector(`:nth-child(2)`).classList.add(`modo-claro`);
-            pokemon.querySelector(`:nth-child(3)`).classList.add(`modo-claro`);
-        });
+            return ``; // Vacío si no es ninguno de los tipos que hay
     }
 }
 
@@ -372,31 +291,3 @@ function controlFlechas() {
 
 // La acción de scroll activa la función
 window.addEventListener(`scroll`, controlFlechas);
-
-/***********************************************************************************************************/
-/* GESTIÓN DE LAS ANIMACIONES DE LAS TARJETAS */
-
-// Establecer los colores de fondo de la tarjetas con los de su tipo
-function animarFondoTarjeta(event) {
-
-    // Pokemon seleccionado
-    const tarjetaPokemon = event.currentTarget;
-    // Contenedor de sus tipos
-    const tipos = tarjetaPokemon.querySelector('.contenedor-tipos');
-    // Color del tipo 1
-    const color1 = window.getComputedStyle(tipos.querySelector(':nth-child(1)')).backgroundColor;
-    // Color del tipo 2
-    const color2 = tipos.querySelector(':nth-child(2)') ? window.getComputedStyle(tipos.querySelector(':nth-child(2)')).backgroundColor : null;
-    // Establecer los colores de fondo de la tarjeta
-    tarjetaPokemon.style.background = `linear-gradient(to left bottom, ${color1} 50%, ${color2 ? color2 : color1} 50%)`;
-
-}
-
-// Restablecer el color de la tarjeta
-function restablecerFondoTarjeta(event) {
-    const tarjetaPokemon = event.currentTarget;
-    tarjetaPokemon.style.background = ``;
-}
-
-// Elementos animados de la lista
-let elementosAnimados;

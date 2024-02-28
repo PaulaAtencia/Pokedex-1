@@ -42,10 +42,13 @@ header img {
     min-width: 230px;
     /* Límite mínimo del tamaño del logo */
 }
-a{width: 25%;
+
+a {
+    width: 25%;
     vertical-align: middle;
     display: inline-block;
-    min-width: 230px;}
+    min-width: 230px;
+}
 
 body {
     background-size: 100%;
@@ -56,11 +59,11 @@ body {
 }
 
 body.modo-claro {
-    background-image: url("images/bg-light.jpg");
+    background-color: #FFFFFF;
 }
 
 body.modo-oscuro {
-    background-image: url("images/bg-dark.jpg");
+   background-color: #000000;
 }
 
 @media screen and (max-width: 1700px){
@@ -218,6 +221,7 @@ body.modo-oscuro {
     align-items: center;
     flex-direction: column;
 }
+
 #pokemonContainer{
     padding: 30px;
     display: flex;
@@ -254,28 +258,11 @@ body.modo-oscuro {
     font-weight: bold;
 }
 
-#contenedor-lista {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-#lista-pokemons {
-    width: 1080px;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-items: center;
-}
-
 .barra_estadisticas {
     width: 0;
     height: 20px; 
     background-color: rgb(154, 43, 69); 
   }
-
-
-
 
 .contenedor-elemento {
     box-sizing: border-box;
@@ -503,4 +490,37 @@ body.modo-oscuro {
     {
         width: 30px;
     }
+}
+
+#contenedor-cadenaEvolutiva {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+#contenido-cadenaEvolutiva {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#titulo-cadenaEvolutiva {
+    font-family: "Mermaid";
+    font-size: 28px;
+    color: #000000;
+}
+
+/* Para las animaciones de las tarjetas pokémon */
+.elemento-animado {
+    transition: transform 0.3s ease, border-color 0.3s ease;
+}
+
+.elemento-animado:hover {
+    transform: scale(1.1);
+}
+
+.flechaEvolucion {
+    padding: 5px;
+    width: 50px;
 }
