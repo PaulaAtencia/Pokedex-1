@@ -30,7 +30,9 @@ body.modo-oscuro {
     .evolucionInfoBoton,
     #info-MetodoEvolucion,
     .subContenedor-InfoEv,
-    .auxInfo-MetEv {
+    .auxInfo-MetEv,
+    #pokemonInfoContainer,
+    #pokemonStats {
         color: #FFFFFF;
         box-shadow: 0 0 10px rgba(255, 255, 255, 1);
         border: 2px solid #FFFFFF;
@@ -88,7 +90,7 @@ h3 {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-
+    
     font-family: "Mermaid";
     font-size: 18px;
     align-items: end;
@@ -96,7 +98,7 @@ h3 {
     box-shadow: 0 0 10px rgba(0, 0, 0, 1);
     border: 2px solid #000000;
     border-radius: 20px;
-    width:fit-content;
+    width: fit-content;
     background-color: #FFFFFF;
 }
 
@@ -104,7 +106,7 @@ h3 {
     width: 120px;
     display: flex;
     flex-direction: row;
-    margin: 40px; /* Espacio entre cada estadística */
+    margin: 40px auto; /* Espacio entre cada estadística */
     /*width: auto;*/
     align-items: center;
     align-content: center;
