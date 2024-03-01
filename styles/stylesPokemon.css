@@ -106,7 +106,7 @@ h3 {
     width: 120px;
     display: flex;
     flex-direction: row;
-    margin: 40px auto; /* Espacio entre cada estadística */
+    margin: 40px; /* Espacio entre cada estadística */
     /*width: auto;*/
     align-items: center;
     align-content: center;
