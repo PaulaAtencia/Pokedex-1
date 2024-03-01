@@ -1,0 +1,160 @@
+@import url(stylesGeneral.css);
+
+
+/* Logo */
+header a {
+    width: 100%;
+    display: inline-block;
+    text-align: center;
+
+    img {
+        width: 25%;
+        vertical-align: middle;
+        min-width: 230px;
+        /* Límite mínimo del tamaño del logo */
+    }
+}
+
+body.modo-claro {
+    background-color: #FFFFFF;
+}
+
+body.modo-oscuro {
+    background-color: #000000;
+
+    .evolucionInfo {
+        color: #FFFFFF;
+        box-shadow: 0 0 10px rgba(255, 255, 255, 1);
+        border: 2px solid #FFFFFF;
+        background-color: #000000;
+    }
+
+    #titulo-cadenaEvolutiva,
+    .nombre_estadistica,
+    .valor_estadistica,
+    #total-stats,
+    h3 {
+        color: #FFFFFF;
+    }
+}
+
+h3 {
+    font-family: "Mermaid";
+    font-size: 20px;
+}
+
+/* Imagen grande del pokémon en su vista */
+#pokemonImagen {
+    width: 475px;
+}
+
+#pokemonInfoContainer {
+    padding: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+#pokemonStats {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.stat {
+    margin: 20px; /* Espacio entre cada estadística */
+    width: 120px;
+}
+
+.barra_valor {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 120px; /* Ancho de la barra y el valor */
+}
+
+.barra_estadisticas {
+    width: 120px; /* Ancho de la barra */
+    height: 20px;
+    background-color: blue; /* Color de la barra */
+    margin-bottom: 5px;
+    align-self: center;
+}
+
+.nombre_estadistica {
+    font-family: "Mermaid";
+    text-align: center;
+}
+
+.valor_estadistica {
+    font-weight: bold;
+    font-family: "Good";
+    text-align: center;
+}
+
+#total-stats {
+    font-family: "Mermaid";
+    text-align: center;
+}
+
+/* Contiene el título y la cadena evolutiva */
+#contenedor-cadenaEvolutiva {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+/* Contiene los pokemons de la cadena evolutiva */
+#contenido-cadenaEvolutiva {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Contiene los pokemons de una misma "fase" evolutiva */
+#contenido-FaseEvolucion {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    margin: 30px;
+    flex-wrap: wrap;
+}
+
+/* Estilo del título de la cadena evolutiva */
+#titulo-cadenaEvolutiva {
+    font-family: "Mermaid";
+    font-size: 28px;
+    color: #000000;
+    margin-bottom: 30px;
+}
+
+/* Flecha roja que indice la evolución de un pokémon a otro */
+.flechaEvolucion {
+    padding-left: 40px;
+    padding-right: 50px;
+    width: 32px;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+/* Estilo del texto de información de la evolución */
+.evolucionInfo {
+    margin-top: 10px;
+    font-family: "Mermaid";
+    font-size: 18px;
+    width: 100px;
+    height: 50px;
+    color: #000000;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 1);
+    border: 2px solid #000000;
+    background-color: #FFFFFF;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

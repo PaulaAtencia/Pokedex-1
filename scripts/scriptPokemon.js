@@ -12,6 +12,7 @@ document.addEventListener(`DOMContentLoaded`, async function () {
   const numeroPokemon = await obtenerNumeroPokemon();
   const datos = await traerPokemon(numeroPokemon);
   await crearPokemon(datos);
+  await ponerTitle(datos);
   await mostrarEstadisticasPokemon(datos.id);
   await crearCadenaEvolutiva(datos.id);
   verificarModo();
@@ -19,7 +20,7 @@ document.addEventListener(`DOMContentLoaded`, async function () {
 
 // Obtener el número del pokemon que se seleccionó antes de entrar a esta vista
 async function obtenerNumeroPokemon() {
-  return localStorage.getItem(`numeroPokemonSeleccionado`);
+  return sessionStorage.getItem(`numeroPokemonSeleccionado`);
 }
 
 async function traerPokemon(num) {
@@ -39,26 +40,27 @@ async function crearPokemon(pokemon) {
   let numeroPokemon = String(pokemon.id).padStart(3, `0`);
 
   const img = document.createElement(`img`);
-  img.src = `https://assets.pokemon.com/assets/cms2/img/pokedex/detail/${numeroPokemon}.png`;
+  img.src = `https://assets.pokemon.com/assets/cms2/img/pokedex/full/${numeroPokemon}.png`;
+  img.id = `pokemonImagen`;
 
   const div = document.createElement(`div`);
   div.appendChild(img);
 
   const h3Nombre = document.createElement(`h3`);
-  h3Nombre.textContent = `Nombre: ` + pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1);
+  h3Nombre.textContent = `Nombre: ` + corregirNombre(pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1));
   div.appendChild(h3Nombre);
 
   const h3Id = document.createElement(`h3`);
-  h3Id.textContent = `ID: ` + numeroPokemon;
+  h3Id.textContent = `Nº: ` + numeroPokemon;
   div.appendChild(h3Id);
 
   const h3Altura = document.createElement(`h3`);
-  h3Altura.textContent = `Altura: ` + pokemon.height;
+  h3Altura.textContent = `Altura: ` + (pokemon.height) / 10 + ` m`;
   div.appendChild(h3Altura);
 
 
   const h3Peso = document.createElement(`h3`);
-  h3Peso.textContent = `Peso: ` + pokemon.weight;
+  h3Peso.textContent = `Peso: ` + (pokemon.weight) / 10 + ` Kg`;
   div.appendChild(h3Peso);
 
 
@@ -75,53 +77,16 @@ async function crearPokemon(pokemon) {
   h3Types.textContent = h3Types.textContent.slice(0, -2);
   div.appendChild(h3Types);
 
-  document.getElementById(`pokemonContainer`).appendChild(div);
+  document.getElementById(`pokemonInfoContainer`).appendChild(div);
 }
 
 
-function traducirTipo(tipo) {
-  switch (tipo) {
-    case `normal`:
-      return `Normal`;
-    case `fire`:
-      return `Fuego`;
-    case `water`:
-      return `Agua`;
-    case `electric`:
-      return `Eléctrico`;
-    case `grass`:
-      return `Planta`;
-    case `ice`:
-      return `Hielo`;
-    case `fighting`:
-      return `Lucha`;
-    case `poison`:
-      return `Veneno`;
-    case `ground`:
-      return `Tierra`;
-    case `flying`:
-      return `Volador`;
-    case `psychic`:
-      return `Psíquico`;
-    case `bug`:
-      return `Bicho`;
-    case `rock`:
-      return `Roca`;
-    case `ghost`:
-      return `Fantasma`;
-    case `dragon`:
-      return `Dragón`;
-    case `dark`:
-      return `Siniestro`;
-    case `steel`:
-      return `Acero`;
-    case `fairy`:
-      return `Hada`;
-    default:
-      return ``; // Si el tipo no está definido, se devuelve vacío
-  }
+// Nombra a la página con el nombre del pokémon
+async function ponerTitle(pokemon) {
+  let nombre = pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1);
+  nombre = corregirNombre(nombre);
+  document.title = nombre;
 }
-
 
 // Este fetch se ocupa de coger las stats del pokemon
 async function mostrarEstadisticasPokemon(pokemonId) {
@@ -143,9 +108,6 @@ async function mostrarEstadisticasPokemon(pokemonId) {
         stats[statName] = baseStat;
         totalStats += baseStat;
       });
-
-      // Mostrar el total de estadísticas
-      console.log("Total:", totalStats);
 
       // Mostrar las estadísticas individuales y animar las barras de progreso
       mostrarBarraDeEstadistica("#hp", stats[`hp`]);
@@ -175,8 +137,10 @@ function mostrarBarraDeEstadistica(selector, valor) {
 }
 
 function mostrarTotalDeEstadisticas(selector, total) {
-  const totalElement = document.querySelector(selector);
-  totalElement.textContent = "Total: " + total;
+  const totalValue = document.querySelector(selector + " .valor_estadistica");
+
+  // Mostrar el valor numérico de la estadística
+  totalValue.textContent = total;
 }
 
 // Obtener otros muchos datos en formato JSON de la PokeAPI de un pokemon
@@ -194,100 +158,109 @@ async function crearCadenaEvolutiva(numPokemon) {
   const pokemonDatos = await obtenerPokemonSpecies(numPokemon);
 
   // Obtener datos de la cadena
-  const cadenaDatos = await (await fetch(pokemonDatos.evolution_chain.url)).json();
+  const cadenaEvolutivaDatos = await (await fetch(pokemonDatos.evolution_chain.url)).json();
 
 
   // Añadir primer pokemon de la cadena
 
+  const datosGenEv1 = await obtenerPokemonSpecies(await corregirNombre(cadenaEvolutivaDatos.chain.species.name));
+
   // Comprobar generación del pokemon
-  if (aceptarGeneracion(await obtenerPokemonSpecies(cadenaDatos.chain.species.name))) {
-    // Obtener datos del pokemon
-    const datosEv1 = await traerPokemon(cadenaDatos.chain.species.name);
+  if (aceptarGeneracion(datosGenEv1)) {
     // Añadimos el primer pokemon
-    await addPokemonEnCadenaEv(datosEv1);
+    await addPokemonEnCadenaEv(datosGenEv1);
   }
 
 
   // Añadir segunda pokemon de la cadena
 
   // Comprobar que hay evolución
-  if (cadenaDatos.chain.evolves_to !== undefined) {
+  if (cadenaEvolutivaDatos.chain.evolves_to.length !== 0) {
 
-    // Creamos flecha de evolución
-    const flechaEv = document.createElement(`div`);
-    flechaEv.classList = `flechaEvolucion`;
-    const imgFlecha = document.createElement(`img`);
-    imgFlecha.src = `images/flechasevolucion.png`;
-    flechaEv.appendChild(imgFlecha);
-
-    // Añadimos al contenedor de la cadena la flecha
-    contenedorCadenaEv.appendChild(flechaEv);
+    crearFlechaEvolucion();
 
     // Datos de los pokemons a los que puede evoluciar a partir de ese
-    const datosEvolucion1 = cadenaDatos.chain.evolves_to;
+    const datosEvolucion1 = cadenaEvolutivaDatos.chain.evolves_to;
 
+    // Si existen diversas evoluciones, creamos el subconjunto
+    if (datosEvolucion1.length > 1) {
+      const subconjunto = document.createElement(`div`);
+      subconjunto.id = `contenido-FaseEvolucion`;
+      contenedorCadenaEv.appendChild(subconjunto);
+    }
 
     // Repetir mientras haya pokemons (puede haber varios, como Eevee)
-    for (let i = 0; datosEvolucion1[i] !== undefined; i++) {
+    for (let i = 0; i < datosEvolucion1.length; i++) {
 
-      const datosGenEv2 = await obtenerPokemonSpecies(datosEvolucion1[i].species.name);
+      const datosGenEv2 = await obtenerPokemonSpecies(await corregirNombre(datosEvolucion1[i].species.name));
       // Comprobar generación del pokemon
       if (aceptarGeneracion(datosGenEv2)) {
-        // Obtener datos del pokemon
-        const datosEv2 = await traerPokemon(datosEvolucion1[i].species.name);
+
         // Añadimos el primer pokemon
-        await addPokemonEnCadenaEv(datosEv2);
+        await addPokemonEnCadenaEv(datosGenEv2);
 
         // Añadir tercer pokemon de la cadena
-        if (datosEvolucion1[i].evolves_to !== undefined) {
+        if (datosEvolucion1[i].evolves_to.length !== 0) {
 
-          // Creamos flecha de evolución
-          const flechaEv2 = document.createElement(`div`);
-          flechaEv2.classList = `flechaEvolucion`;
-          const imgFlecha2 = document.createElement(`img`);
-          imgFlecha2.src = `images/flechasevolucion.png`;
-          flechaEv2.appendChild(imgFlecha2);
-
-          // Añadimos al contenedor de la cadena la flecha
-          contenedorCadenaEv.appendChild(flechaEv2);
+          crearFlechaEvolucion();
 
           // Datos de los pokemons a los que puede evoluciar a partir de ese
           const datosEvolucion2 = datosEvolucion1[i].evolves_to;
 
           // Repetir mientras haya pokemons (puede haber varios, como Eevee)
-          for (let i = 0; datosEvolucion2[i] !== undefined; i++) {
+          for (let i = 0; i < datosEvolucion2.length; i++) {
 
-            const datosGenEv3 = await obtenerPokemonSpecies(datosEvolucion2[i].species.name);
+            const datosGenEv3 = await obtenerPokemonSpecies(await corregirNombre(datosEvolucion2[i].species.name));
+
             // Comprobar generación del pokemon
             if (aceptarGeneracion(datosGenEv3)) {
-              // Obtener datos del pokemon
-              const datosEv3 = await traerPokemon(datosEvolucion2[i].species.name);
               // Añadimos el primer pokemon
-              await addPokemonEnCadenaEv(datosEv3);
+              await addPokemonEnCadenaEv(datosGenEv3);
             }
           }
-
         }
       }
-
     }
   }
-
-
 }
 
+// Añade una flecha de paso de evolución
+function crearFlechaEvolucion() {
+  // Obtenemos el contenedor que contiene varios pokemon de una fase evolutiva
+  const contenedorSubconjunto = document.getElementById(`contenido-FaseEvolucion`);
 
-const generaciones = [`i`, `ii`, `iii`, `iv`];
-// Devuelve true si el pokemon pertenece a una de las generaciones del array
-function aceptarGeneracion(datos) {
-  const numGeneracion = datos.generation.name.slice(11);
-  if (generaciones.includes(numGeneracion)) {
-    return true;
+  // Creamos contenedor de flecha de evolución
+  const flechaEv = document.createElement(`div`);
+  flechaEv.classList = `flechaEvolucion`;
+
+  // Imagen
+  const imgFlecha = document.createElement(`img`);
+  imgFlecha.src = `images/flechasevolucion.png`;
+  flechaEv.appendChild(imgFlecha);
+
+  // Info del método de evolución
+  const info = document.createElement(`div`);
+  info.textContent = `INFO`;
+  info.classList = `evolucionInfo`;
+  flechaEv.appendChild(info);
+
+  // Si se ha creado el conjunto, se añade el pokémon ahí
+  if (contenedorSubconjunto !== null) {
+    // Añadimos al subcontenedor el pokemon
+    contenedorSubconjunto.appendChild(flechaEv);
   }
-  return false;
+  // Sino el caso normal
+  else {
+    // Añadimos el contenedor del pokemon al contenedor de la cadena
+    contenedorCadenaEv.appendChild(flechaEv);
+  }
 }
 
 async function addPokemonEnCadenaEv(datos) {
+
+  // Obtenemos el contenedor que contiene varios pokemon de una fase evolutiva
+  const contenedorSubconjunto = document.getElementById(`contenido-FaseEvolucion`);
+
   // Creamos contenedor del pokemon
   let contenedor = document.createElement(`div`);
   contenedor.className = `elemento-cadena contenedor-elemento elemento-animado`;
@@ -328,6 +301,9 @@ async function addPokemonEnCadenaEv(datos) {
   // Lo añadimos 
   contenedor.appendChild(numero);
 
+  // Obtenemos los datos de la API donde salen los tipos
+  const datosTipos = await traerPokemon(datos.id);
+
   // Creamos el contenedor de los tipos
   let divTipos = document.createElement(`div`);
   divTipos.className = `contenedor-tipos`;
@@ -338,7 +314,7 @@ async function addPokemonEnCadenaEv(datos) {
   let textoTipo1 = document.createElement(`div`);
   textoTipo1.className = `contenedor-texto-tipo`;
   // Traducimos el primer tipo y lo añadimos al contenedor
-  textoTipo1.textContent = traducirTipo(datos.types[0].type.name);
+  textoTipo1.textContent = traducirTipo(datosTipos.types[0].type.name);
   // Añadimos las clases del contenedor (la segunda sirve para el color de fondo)
   divTipo1.className = `contenedor-tipo ` + textoTipo1.textContent;
   // Añadimos el texto del tipo al contenedor del tipo
@@ -347,16 +323,20 @@ async function addPokemonEnCadenaEv(datos) {
   divTipo1.width = textoTipo1.width * 3;
   // Añadir contenedor de tipo 1 a Tipos
   divTipos.appendChild(divTipo1);
+  // Añadir tipo 1 a las clase del elemento
+  contenedor.classList.add(textoTipo1.textContent + `t1`);
+  // Añadimos tipo 2 a las clase del elemento como si fuera nulo (por si no tiene)
+  contenedor.classList.add(`nullt2`);
 
   // Añadir si tiene segundo tipo
-  if (datos.types[1] != null) {
+  if (datosTipos.types[1] != null) {
     // Creamos el contenedor del segundo tipo
     let divTipo2 = document.createElement(`div`);
     // Creamos el contenedor del texto
     let textoTipo2 = document.createElement(`div`);
     textoTipo2.className = `contenedor-texto-tipo`;
     // Traducimos el segundo tipo y lo añadimos al contenedor
-    textoTipo2.textContent = await traducirTipo(datos.types[1].type.name);
+    textoTipo2.textContent = await traducirTipo(datosTipos.types[1].type.name);
     // Añadimos las clases del contenedor (la segunda sirve para el color de fondo)
     divTipo2.className = `contenedor-tipo ` + textoTipo2.textContent;
     // Añadimos el texto del tipo al contenedor del tipo
@@ -365,13 +345,23 @@ async function addPokemonEnCadenaEv(datos) {
     divTipo2.width = textoTipo2.width * 3;
     // Añadir contenedor de tipo 2 a Tipos
     divTipos.appendChild(divTipo2);
+    // Añadir tipo 2 a las clase del elemento
+    contenedor.classList.add(textoTipo2.textContent + `t2`);
   }
 
   // Añadir contenedor de los tipos al elemento
   contenedor.appendChild(divTipos);
 
-  // Añadimos el contenedor del pokemon al contenedor de la cadena
-  contenedorCadenaEv.appendChild(contenedor);
+  // Si se ha creado el conjunto, se añade el pokémon ahí
+  if (contenedorSubconjunto !== null) {
+    // Añadimos al subcontenedor el pokemon
+    contenedorSubconjunto.appendChild(contenedor);
+  }
+  // Sino el caso normal
+  else {
+    // Añadimos el contenedor del pokemon al contenedor de la cadena
+    contenedorCadenaEv.appendChild(contenedor);
+  }
 
   elementosAnimados = document.querySelectorAll(`.elemento-animado`); // Actualizar lista para las animaciones
 
@@ -380,10 +370,4 @@ async function addPokemonEnCadenaEv(datos) {
     elemento.addEventListener(`mouseover`, animarFondoTarjeta);
     elemento.addEventListener(`mouseout`, restablecerFondoTarjeta);
   });
-}
-
-// Manda al localStorage el número pokémon que cargará en la segunda vista
-function guardarNumeroPokemon(num) {
-  // Guardar número en localStorage
-  localStorage.setItem(`numeroPokemonSeleccionado`, num);
 }

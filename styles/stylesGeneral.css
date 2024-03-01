@@ -1,22 +1,22 @@
 /* Fuentes */
 @font-face {
     font-family: 'Gellisto';
-    src: url("fonts/gellisto.ttf");
+    src: url("../fonts/gellisto.ttf");
 }
 
 @font-face {
     font-family: 'Jackson';
-    src: url("fonts/jackson.ttf");
+    src: url("../fonts/jackson.ttf");
 }
 
 @font-face {
     font-family: 'Mermaid';
-    src: url("fonts/mermaid.ttf");
+    src: url("../fonts/mermaid.ttf");
 }
 
 @font-face {
     font-family: 'Good';
-    src: url("fonts/good.ttf");
+    src: url("../fonts/good.ttf");
 }
 
 header {
@@ -30,18 +30,10 @@ header {
 @media screen and (max-width: 768px) {
     header {
         border-bottom: 2px solid #000000;
-        /* Reducir el porcentaje del borde */
+        /* Reduce el porcentaje del borde */
     }
 }
 
-/* Logo */
-header img {
-    width: 25%;
-    vertical-align: middle;
-    display: inline-block;
-    min-width: 230px;
-    /* Límite mínimo del tamaño del logo */
-}
 
 body {
     background-size: 100%;
@@ -50,24 +42,14 @@ body {
     background-repeat: no-repeat;
     background-attachment: fixed;
     /* Imagen del cursor */
-    cursor: url('images/pokeballcursor.png'), pointer;
-}
-
-body.modo-claro {
-    background-image: url("images/bg-light.jpg");
-}
-
-body.modo-oscuro {
-    background-image: url("images/bg-dark.jpg");
+    cursor: url('../images/pokeballcursor.png'), pointer;
 }
 
 @media screen and (max-width: 1700px) {
-
     body {
         background-size: cover;
     }
 }
-
 
 /* Contiene el buscador y el botón del modo oscuro */
 #contenedor-barra-superior {
@@ -103,6 +85,7 @@ body.modo-oscuro {
 
 }
 
+/* Botón del modo oscuro */
 #boton-modo {
     box-sizing: border-box;
     background-color: #b0abb7;
@@ -118,6 +101,7 @@ body.modo-oscuro {
     width: 40px;
 }
 
+/* Icono del botón del modo oscuro */
 #imagen-modo {
     cursor: pointer;
     width: 30px;
@@ -125,70 +109,7 @@ body.modo-oscuro {
     margin: 5px;
 }
 
-#contenedor-buscador {
-    display: flex;
-    justify-content: center;
-    align-self: center;
-    margin: auto;
-
-}
-
-#buscador {
-    margin: 10px;
-    padding: 10px;
-    border: 2px solid #ccc;
-    border-radius: 5px;
-    font-family: "Mermaid";
-
-    outline: none;
-    width: 300px;
-    transition: border-color 0.3s ease;
-    /* Efecto de transición */
-}
-
-#icono-lupa {
-    width: 40px;
-    margin-bottom: 10px;
-    margin-top: 10px;
-    margin-right: 10px;
-    cursor: pointer;
-}
-
-@media screen and (max-width: 510px) {
-    #buscador {
-        width: 155px;
-    }
-}
-
-#buscador:focus {
-    border-color: #007BFF;
-    box-shadow: 0 0 20px rgba(0, 123, 255, 0.8);
-}
-
-#buscador.sinResultados {
-    border: 2px solid #e20707;
-    box-shadow: 0 0 20px rgba(174, 17, 17, 0.8);
-}
-
-#buscador.conResultados {
-    border: 2px solid #168005;
-    box-shadow: 0 0 20px rgba(1, 105, 8, 0.8);
-}
-
-#contenedor-filtro-tipos {
-    margin-top: 10px;
-    margin-bottom: 10px;
-    margin-left: auto;
-    margin-right: 10px;
-
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 50px;
-}
-
-
-/* Contenedor de la lista */
+/* Contenedor principal de la lista/información */
 #contenedor-pokedex {
     padding: 30px;
     display: flex;
@@ -197,20 +118,7 @@ body.modo-oscuro {
     flex-direction: column;
 }
 
-#contenedor-lista {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-#lista-pokemons {
-    width: 1080px;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-items: center;
-}
-
+/* Donde va contenido toda una tarjeta de un pokémon */
 .contenedor-elemento {
     box-sizing: border-box;
     padding: 5px;
@@ -223,11 +131,11 @@ body.modo-oscuro {
     min-width: 235px;
 
     /* Imagen del cursor al seleccionar algo */
-    cursor: url('images/openpokeballcursor.png'), pointer;
+    cursor: url('../images/openpokeballcursor.png'), pointer;
 
     a {
         /* Imagen del cursor al seleccionar algo */
-        cursor: url('images/openpokeballcursor.png'), pointer;
+        cursor: url('../images/openpokeballcursor.png'), pointer;
     }
 }
 
@@ -241,82 +149,7 @@ body.modo-oscuro {
     box-shadow: 0 0 10px rgba(0, 0, 0, 1);
     border: 2px solid #000000;
     background-color: #FFFFFF;
-
 }
-
-
-/* Para las animaciones de las tarjetas pokémon */
-.elemento-animado {
-    transition: transform 0.3s ease,
-        border-color 0.3s ease;
-}
-
-.elemento-animado:hover {
-    transform: scale(1.1);
-}
-
-
-@media screen and (max-width: 1100px) {
-    #lista-pokemons {
-        width: 780px;
-        /* Máximo 3 elementos por fila */
-    }
-}
-
-@media screen and (max-width: 860px) {
-    #lista-pokemons {
-        width: 500px;
-        /* Máximo 2 elementos por fila */
-    }
-}
-
-@media screen and (max-width: 620px) {
-    #lista-pokemons {
-        width: 270px;
-        /* Máximo 1 elemento por fila */
-    }
-}
-
-/* Imagen del elemento */
-.contenedor-elemento>a {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-}
-
-/* Número del pokémon */
-.contenedor-numero {
-    margin-left: 15px;
-    font-family: 'Good';
-    font-size: 14px;
-}
-
-.contenedor-numero.modo-claro {
-    color: #000000;
-}
-
-.contenedor-numero.modo-oscuro {
-    color: #FFFFFF;
-}
-
-
-/* Nombre del pokémon */
-.contenedor-nombre {
-    margin-left: 15px;
-    font-family: 'Mermaid';
-    font-size: 24px;
-}
-
-.contenedor-nombre.modo-claro {
-    color: #000000;
-}
-
-.contenedor-nombre.modo-oscuro {
-    color: #FFFFFF;
-}
-
 
 /* Todos los tipos del pokémon */
 .contenedor-tipos {
@@ -346,6 +179,54 @@ body.modo-oscuro {
     text-shadow: 2px 2px 3px rgba(0, 0, 0, 0.95);
 }
 
+/* Imagen del elemento (pokémon) */
+.contenedor-elemento a {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+
+/* Nombre del pokémon */
+.contenedor-nombre {
+    margin-left: 15px;
+    font-family: 'Mermaid';
+    font-size: 24px;
+}
+
+.contenedor-nombre.modo-claro {
+    color: #000000;
+}
+
+.contenedor-nombre.modo-oscuro {
+    color: #FFFFFF;
+}
+
+/* Número del pokémon */
+.contenedor-numero {
+    margin-left: 15px;
+    font-family: 'Good';
+    font-size: 14px;
+}
+
+.contenedor-numero.modo-claro {
+    color: #000000;
+}
+
+.contenedor-numero.modo-oscuro {
+    color: #FFFFFF;
+}
+
+/* Para las animaciones de las tarjetas pokémon */
+.elemento-animado {
+    transition: transform 0.3s ease, border-color 0.3s ease;
+}
+
+/* Aumento de tamaño de las tarjetas al pasar el ratón por encima */
+.elemento-animado:hover {
+    transform: scale(1.1);
+}
 
 /* Colores de los contenedores de cada tipo */
 .contenedor-tipos {
@@ -423,51 +304,13 @@ body.modo-oscuro {
     }
 }
 
-/* Mensaje de letras rojas al no encontrar pokemons en el buscador */
+/* Estilo del texto de los mensajes de error */
 .mensaje-error {
     font-family: "Mermaid";
     font-size: 28px;
     color: #ff0000;
     text-shadow: 1px 1px 1px rgb(0, 0, 0);
     -webkit-text-stroke: 0.5px #000000;
-}
-
-/* Diseños de las dos flechas de la esquina inferior derecha */
-#contenedor-flecha-abajo {
-    width: 50px;
-    position: fixed;
-    right: 2px;
-    bottom: 1px;
-}
-
-#contenedor-flecha-arriba {
-    width: 50px;
-    position: fixed;
-    right: 2px;
-    bottom: 65px;
-    display: none;
-    /* Al principio no aparece */
-}
-
-#contenedor-flecha-arriba img,
-#contenedor-flecha-abajo img {
-    width: 50px;
-    cursor: pointer;
-}
-
-@media screen and (max-width: 400px) {
-
-    #contenedor-flecha-arriba img,
-    #contenedor-flecha-abajo img,
-    #contenedor-flecha-arriba,
-    #contenedor-flecha-abajo {
-        width: 30px;
-    }
-}
-
-/* Animación del color de las tarjetas al pasar el ratón */
-.elemento-animado:hover {
-    transition: border-color 0.5s, box-shadow 0.5s;
 }
 
 /* Animación del color de las tarjetas al pasar el ratón según el tipo 1 */

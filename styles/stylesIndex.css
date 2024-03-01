@@ -1,0 +1,159 @@
+@import url(stylesGeneral.css);
+
+/* Logo */
+header img {
+    width: 25%;
+    vertical-align: middle;
+    display: inline-block;
+    min-width: 230px;
+    /* Límite mínimo del tamaño del logo */
+}
+
+body.modo-claro {
+    background-image: url("../images/bg-light.jpg");
+}
+
+body.modo-oscuro {
+    background-image: url("../images/bg-dark.jpg");
+}
+
+
+/* Contiene el buscador por nombre */
+#contenedor-buscador {
+    display: flex;
+    justify-content: center;
+    align-self: center;
+    margin: auto;
+}
+
+/* Buscador por nombre */
+#buscador {
+    margin: 10px;
+    padding: 10px;
+    border: 2px solid #ccc;
+    border-radius: 5px;
+    font-family: "Mermaid";
+
+    outline: none;
+    width: 300px;
+    transition: border-color 0.3s ease;
+    /* Efecto de transición */
+}
+
+/* Icono de la derecha del buscador */
+#icono-lupa {
+    width: 40px;
+    margin-bottom: 10px;
+    margin-top: 10px;
+    margin-right: 10px;
+}
+
+/* Ajuste del tamaño buscador */
+@media screen and (max-width: 510px) {
+    #buscador {
+        width: 155px;
+    }
+}
+
+/* Estado del buscador cuando es seleccionado */
+#buscador:focus {
+    border-color: #007BFF;
+    box-shadow: 0 0 20px rgba(0, 123, 255, 0.8);
+}
+
+/* Estado del buscador cuando no encuentra pokemons */
+#buscador.sinResultados {
+    border: 2px solid #e20707;
+    box-shadow: 0 0 20px rgba(174, 17, 17, 0.8);
+}
+
+/* Estado del buscador cuando encuentra pokemons */
+#buscador.conResultados {
+    border: 2px solid #168005;
+    box-shadow: 0 0 20px rgba(1, 105, 8, 0.8);
+}
+
+/* Contenedor donde va el botón de acceso al filtro por tipos */
+#contenedor-filtro-tipos {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    margin-left: auto;
+    margin-right: 10px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 50px;
+}
+
+#contenedor-lista {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#lista-pokemons {
+    width: 1080px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+}
+ 
+
+@media screen and (max-width: 1100px) {
+    #lista-pokemons {
+        width: 780px;
+        /* Máximo 3 elementos por fila */
+    }
+}
+
+@media screen and (max-width: 860px) {
+    #lista-pokemons {
+        width: 500px;
+        /* Máximo 2 elementos por fila */
+    }
+}
+
+@media screen and (max-width: 620px) {
+    #lista-pokemons {
+        width: 270px;
+        /* Máximo 1 elemento por fila */
+    }
+}
+
+
+/* Diseños de las dos flechas de la esquina inferior derecha */
+#contenedor-flecha-abajo {
+    width: 50px;
+    position: fixed;
+    right: 2px;
+    bottom: 1px;
+}
+
+#contenedor-flecha-arriba {
+    width: 50px;
+    position: fixed;
+    right: 2px;
+    bottom: 65px;
+    display: none;
+    /* Al principio no aparece */
+}
+
+/* Imágenes de las flechas */
+#contenedor-flecha-arriba img,
+#contenedor-flecha-abajo img {
+    width: 50px;
+    cursor: pointer;
+}
+
+/* Escalado de las flecha según resolución */
+@media screen and (max-width: 400px) {
+
+    #contenedor-flecha-arriba img,
+    #contenedor-flecha-abajo img,
+    #contenedor-flecha-arriba,
+    #contenedor-flecha-abajo {
+        width: 30px;
+    }
+}

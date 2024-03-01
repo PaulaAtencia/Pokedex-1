@@ -14,9 +14,11 @@ async function cargarTodosPokemon() {
 
 // Función hecha al inicio de cargar la página (carga todos los pokémon en la lista)
 document.addEventListener(`DOMContentLoaded`, async function () {
+    buscador.disabled = true; // Desactivar uso del buscador
     await cargarTodosPokemon();
     await mostrarPokemonList(datosPokemon);
     buscador.value = ``; // Limpiar búsqueda previa
+    buscador.disabled = false; // Activar uso del buscador
 });
 
 const buscador = document.getElementById(`buscador`);
@@ -35,7 +37,7 @@ buscador.addEventListener(`input`, async function (event) {
 // Función que filtra los pokémon que empiezan por el string dado
 async function filtrarListaPorNombre(busqueda) {
     let listaFiltrada = datosPokemon.filter(function (pokemon) {
-        return pokemon.name.toLowerCase().includes(busqueda.toLowerCase());
+        return corregirNombre(pokemon.name.toLowerCase()).includes(busqueda.toLowerCase());
     });
 
     mostrarPokemonList(listaFiltrada);
@@ -108,6 +110,8 @@ async function mostrarPokemonList(datos) {
         // Obtener nombre y poner primera letra en mayúscula
         let nombrePokemon = datos[i].name;
         nombrePokemon = nombrePokemon.charAt(0).toUpperCase() + nombrePokemon.slice(1);
+        // Eliminar extensiones del nombre que no hacen falta
+        nombrePokemon = corregirNombre(nombrePokemon);
         // Creamos el contenedor del nombre
         let divNombre = document.createElement(`div`);
         divNombre.className = `contenedor-nombre`;
@@ -126,7 +130,7 @@ async function mostrarPokemonList(datos) {
         let textoTipo1 = document.createElement(`div`);
         textoTipo1.className = `contenedor-texto-tipo`;
         // Traducimos el primer tipo y lo añadimos al contenedor
-        textoTipo1.textContent = await traducirTipo(datos[i].types[0].type.name);
+        textoTipo1.textContent = traducirTipo(datos[i].types[0].type.name);
         // Añadimos las clases del contenedor (la segunda sirve para el color de fondo)
         divTipo1.className = `contenedor-tipo ` + textoTipo1.textContent;
         // Añadimos el texto del tipo al contenedor del tipo
@@ -148,7 +152,7 @@ async function mostrarPokemonList(datos) {
             let textoTipo2 = document.createElement(`div`);
             textoTipo2.className = `contenedor-texto-tipo`;
             // Traducimos el segundo tipo y lo añadimos al contenedor
-            textoTipo2.textContent = await traducirTipo(datos[i].types[1].type.name);
+            textoTipo2.textContent = traducirTipo(datos[i].types[1].type.name);
             // Añadimos las clases del contenedor (la segunda sirve para el color de fondo)
             divTipo2.className = `contenedor-tipo ` + textoTipo2.textContent;
             // Añadimos el texto del tipo al contenedor del tipo
@@ -186,12 +190,6 @@ async function mostrarPokemonList(datos) {
     });
 }
 
-// Manda al localStorage el número pokémon que cargará en la segunda vista
-function guardarNumeroPokemon(num)
-{
-    // Guardar número en localStorage
-    localStorage.setItem(`numeroPokemonSeleccionado`, num);
-}
 
 // Obtiene los datos de un pokemon pasando su id o su nombre
 async function getPokemon(id) {
@@ -205,49 +203,6 @@ async function getData(url) {
     return datos;
 }
 
-// Traduce el tipo de un pokémon al español
-async function traducirTipo(tipo) {
-    switch (tipo) {
-        case `normal`:
-            return `Normal`;
-        case `fighting`:
-            return `Lucha`;
-        case `flying`:
-            return `Volador`;
-        case `poison`:
-            return `Veneno`;
-        case `ground`:
-            return `Tierra`;
-        case `rock`:
-            return `Roca`;
-        case `bug`:
-            return `Bicho`;
-        case `ghost`:
-            return `Fantasma`;
-        case `steel`:
-            return `Acero`;
-        case `fire`:
-            return `Fuego`;
-        case `water`:
-            return `Agua`;
-        case `grass`:
-            return `Planta`;
-        case `electric`:
-            return `Eléctrico`;
-        case `psychic`:
-            return `Psíquico`;
-        case `ice`:
-            return `Hielo`;
-        case `dragon`:
-            return `Dragón`;
-        case `dark`:
-            return `Siniestro`;
-        case `fairy`:
-            return `Hada`;
-        default:
-            return ``; // Vacío si no es ninguno de los tipos que hay
-    }
-}
 
 /***********************************************************************************************************/
 /* GESTIÓN DE LAS FLECHAS */
