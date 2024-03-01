@@ -103,18 +103,18 @@ h3 {
 }
 
 .stat {
-    width: 120px;
+    
     display: flex;
     flex-direction: row;
     margin: 40px; /* Espacio entre cada estadística */
-    /*width: auto;*/
+    width: auto;
     align-items: center;
     align-content: center;
 }
 
 .barra_valor {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     align-items: center;
     width: 120px; /* Ancho de la barra y el valor */
 }
@@ -125,8 +125,6 @@ h3 {
     background-color: blue; /* Color de la barra */
     margin-bottom: 5px;
     align-self: center;
-    flex-direction: row;
-    align-items: center;
 }
 
 .nombre_estadistica {
