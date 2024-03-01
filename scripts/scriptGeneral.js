@@ -182,10 +182,10 @@ function verificarModo() {
 /* GESTIÓN DE LAS ANIMACIONES DE LAS TARJETAS */
 
 // Establecer los colores de fondo de la tarjetas con los de su tipo
-function animarFondoTarjeta(event) {
+function animarFondoTarjeta(seleccionada) {
 
     // Pokemon seleccionado
-    const tarjetaPokemon = event.currentTarget;
+    const tarjetaPokemon = seleccionada.currentTarget;
     // Contenedor de sus tipos
     const tipos = tarjetaPokemon.querySelector(`.contenedor-tipos`);
     // Color del tipo 1
@@ -198,8 +198,8 @@ function animarFondoTarjeta(event) {
 }
 
 // Restablecer el color de la tarjeta
-function restablecerFondoTarjeta(event) {
-    const tarjetaPokemon = event.currentTarget;
+function restablecerFondoTarjeta(seleccionada) {
+    const tarjetaPokemon = seleccionada.currentTarget;
     tarjetaPokemon.style.background = ``;
 }
 

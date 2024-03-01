@@ -168,7 +168,7 @@ async function crearCadenaEvolutiva(numPokemon) {
   // Comprobar generación del pokemon
   if (aceptarGeneracion(datosGenEv1)) {
     // Añadimos el primer pokemon
-    await addPokemonEnCadenaEv(datosGenEv1);
+    await addPokemonEnCadenaEv(datosGenEv1, contenedorCadenaEv, null);
   }
 
 
@@ -177,14 +177,13 @@ async function crearCadenaEvolutiva(numPokemon) {
   // Comprobar que hay evolución
   if (cadenaEvolutivaDatos.chain.evolves_to.length !== 0) {
 
-    crearFlechaEvolucion();
-
     // Datos de los pokemons a los que puede evoluciar a partir de ese
     const datosEvolucion1 = cadenaEvolutivaDatos.chain.evolves_to;
 
     // Si existen diversas evoluciones, creamos el subconjunto
+    let subconjunto = null;
     if (datosEvolucion1.length > 1) {
-      const subconjunto = document.createElement(`div`);
+      subconjunto = document.createElement(`div`);
       subconjunto.id = `contenido-FaseEvolucion`;
       contenedorCadenaEv.appendChild(subconjunto);
     }
@@ -196,13 +195,25 @@ async function crearCadenaEvolutiva(numPokemon) {
       // Comprobar generación del pokemon
       if (aceptarGeneracion(datosGenEv2)) {
 
+        let filaSubconjunto = null;
+        if (subconjunto !== null) {
+          filaSubconjunto = document.createElement(`div`);
+          filaSubconjunto.classList = `contenido-FilaFaseEv`;
+          subconjunto.appendChild(filaSubconjunto);
+        }
+
+
+        let flechaYpokemon = document.createElement(`div`);
+        flechaYpokemon.classList = `contenedor-flechaConTarjeta`;
+        contenedorCadenaEv.appendChild(flechaYpokemon);
+
+        crearFlechaEvolucion(flechaYpokemon, datosEvolucion1[i].evolution_details);
+
         // Añadimos el primer pokemon
-        await addPokemonEnCadenaEv(datosGenEv2);
+        await addPokemonEnCadenaEv(datosGenEv2, flechaYpokemon, filaSubconjunto);
 
         // Añadir tercer pokemon de la cadena
         if (datosEvolucion1[i].evolves_to.length !== 0) {
-
-          crearFlechaEvolucion();
 
           // Datos de los pokemons a los que puede evoluciar a partir de ese
           const datosEvolucion2 = datosEvolucion1[i].evolves_to;
@@ -214,8 +225,15 @@ async function crearCadenaEvolutiva(numPokemon) {
 
             // Comprobar generación del pokemon
             if (aceptarGeneracion(datosGenEv3)) {
+
+              flechaYpokemon = document.createElement(`div`);
+              flechaYpokemon.classList = `contenedor-flechaConTarjeta`;
+              contenedorCadenaEv.appendChild(flechaYpokemon);
+
+              crearFlechaEvolucion(flechaYpokemon, datosEvolucion2[i].evolution_details);
+
               // Añadimos el primer pokemon
-              await addPokemonEnCadenaEv(datosGenEv3);
+              await addPokemonEnCadenaEv(datosGenEv3, flechaYpokemon, filaSubconjunto);
             }
           }
         }
@@ -225,9 +243,7 @@ async function crearCadenaEvolutiva(numPokemon) {
 }
 
 // Añade una flecha de paso de evolución
-function crearFlechaEvolucion() {
-  // Obtenemos el contenedor que contiene varios pokemon de una fase evolutiva
-  const contenedorSubconjunto = document.getElementById(`contenido-FaseEvolucion`);
+function crearFlechaEvolucion(contenedor, evolucion) {
 
   // Creamos contenedor de flecha de evolución
   const flechaEv = document.createElement(`div`);
@@ -241,29 +257,187 @@ function crearFlechaEvolucion() {
   // Info del método de evolución
   const info = document.createElement(`div`);
   info.textContent = `INFO`;
-  info.classList = `evolucionInfo`;
+  info.classList = `evolucionInfoBoton`;
+  // Asignamos el json con la info de la evolución
+  info.setAttribute(`data-json`, JSON.stringify(evolucion));
+  info.addEventListener(`click`, mostrarInfoEvolucion);
   flechaEv.appendChild(info);
 
-  // Si se ha creado el conjunto, se añade el pokémon ahí
-  if (contenedorSubconjunto !== null) {
-    // Añadimos al subcontenedor el pokemon
-    contenedorSubconjunto.appendChild(flechaEv);
+  // Añadimos la flecha delante de la tarjeta
+  contenedor.appendChild(flechaEv);
+}
+
+// Tarjeta donde aparece la información de la evolución
+const contenedorINFOev = document.getElementById(`info-MetodoEvolucion`);
+
+// Muestra la información necesaria sobre cómo realizar esa evolución
+function mostrarInfoEvolucion(seleccionado) {
+
+  // JSON con información de como realizar la evolución
+  const detallesEv = JSON.parse((seleccionado.currentTarget).getAttribute(`data-json`));
+
+  // Limpiamos el contenedor
+  contenedorINFOev.innerHTML = ``;
+
+  // Obtener todos los contenedores extra con la clase específica si los hay
+  const contenedoresAEliminar = document.querySelectorAll(`.auxInfo-MetEv`);
+
+  // Iterar sobre los elementos y eliminarlos uno por uno
+  contenedoresAEliminar.forEach(function (c) {
+    c.remove();
+  });
+
+  const listaContINFOev = [contenedorINFOev];
+
+  for (let i = 0; i < detallesEv.length; i++) {
+
+    if (i > 0) {
+      listaContINFOev[i] = (document.createElement(`div`));
+      listaContINFOev[i].classList = `auxInfo-MetEv`;
+      document.getElementById(`contenedor-cadenaEvolutiva`).appendChild(listaContINFOev[i]);
+    }
+
+    crearContenedorInfo(traducirInfoEv(detallesEv[i].trigger.name), ``, listaContINFOev[i]);
+
+    crearContenedorInfo(detallesEv[i].min_level, `Debe alcanzar el nivel `, listaContINFOev[i]);
+
+    crearContenedorInfo(detallesEv[i].item, `Item: `, listaContINFOev[i]);
+
+    crearContenedorInfo(detallesEv[i].held_item, `Se debe tener equipado el item: `, listaContINFOev[i]);
+
+    crearContenedorInfo(detallesEv[i].min_happiness, `Debe tener al menos un nivel de amistad de `, listaContINFOev[i]);
+
+    crearContenedorInfo(traducirInfoEv(detallesEv[i].time_of_day), `Debe ser de `, listaContINFOev[i]);
+
+    if (detallesEv[i].location !== null) {
+      crearContenedorInfo(traducirInfoEv(detallesEv[i].location.name), `Debes estar en: `, listaContINFOev[i]);
+    }
+    
+    if(detallesEv[i].gender !== null)
+    {
+      crearContenedorInfo(traducirInfoEv(detallesEv[i].gender), `Debe de ser `, listaContINFOev[i]);
+    }
+    
+    if(detallesEv[i].known_move !== null)
+    {
+      crearContenedorInfo(traducirInfoEv(detallesEv[i].known_move.name), `Debe aprender el movimiento: `, listaContINFOev[i]);
+    }
+
   }
-  // Sino el caso normal
-  else {
-    // Añadimos el contenedor del pokemon al contenedor de la cadena
-    contenedorCadenaEv.appendChild(flechaEv);
+
+}
+
+async function crearContenedorInfo(detalle, texto, superContenedor) {
+  if (detalle !== null && detalle !== ``) {
+    // Contenedor donde va la explicación
+    const contenedor = document.createElement(`div`);
+    contenedor.classList = `subContenedor-InfoEv`;
+
+    if (texto === `Item: ` || texto === `Se debe tener equipado el item: `) {
+      contenedor.textContent = texto + traducirInfoEv(detalle.name);
+
+      const item = await (await fetch(detalle.url)).json();
+      console.log(JSON.stringify(item));
+
+      if (item.sprites.default !== null) {
+        const sprite = document.createElement(`img`);
+        contenedor.appendChild(sprite);
+        sprite.src = item.sprites.default;
+      }
+
+    }
+    else {
+      contenedor.textContent = texto + detalle;
+    }
+
+    superContenedor.appendChild(contenedor);
   }
 }
 
-async function addPokemonEnCadenaEv(datos) {
+
+// Traduce palabras del JSON sobre detalles de evolución
+function traducirInfoEv(detalle) {
+  switch (detalle) {
+    case `level-up`:
+      return `Subir de nivel`;
+    case `trade`:
+      return `Intercambio`;
+    case `use-item`:
+      return `Usar item`;
+    case `shed`:
+      return `Se obtiene como extra al evolucionar Nincada a Ninjask`;
+    case `day`:
+      return `día`;
+    case `night`:
+      return `noche`;
+    case `eterna-forest`:
+      return `Bosque Vetusto`;
+    case `sinnoh-route-217`:
+      return `Ruta 217 de Sinnoh`;
+    case `twist-mountain`:
+      return `Monte Tuerca`;
+    case `frost-cavern`:
+      return `Gruta Helada`;
+    case `pinwheel-forest`:
+      return `Bosque Azulejo`;
+    case `kalos-route-20`:
+      return `Ruta 20 de Kalos`;
+    case `water-stone`:
+      return `Piedra Agua`;
+    case `thunder-stone`:
+      return `Piedra Trueno`;
+    case `fire-stone`:
+      return `Piedra Fuego`;
+    case `moon-stone`:
+      return `Piedra Lunar`;
+    case `sun-stone`:
+      return `Piedra Solar`;
+    case `kings-rock`:
+      return `Piedra Rey`;
+    case `metal-coat`:
+      return `Piedra Noche`;
+    case `upgrade`:
+      return `Objeto Mejora`;
+    case `leaf-stone`:
+      return `Piedra Hoja`;
+    case `shiny-stone`:
+      return `Piedra Alba`;
+    case `dusk-stone`:
+      return `Piedra Amanecer`;
+    case `dawn-stone`:
+      return `Piedra Agudo`;
+    case `oval-stone`:
+      return `Piedra Oval`;
+    case `dubious-disc`:
+      return `Piedra Peso`;
+    case `ice-stone`:
+      return `Piedra Hielo`;
+    case `up-grade`:
+      return `Mejora`;
+    case `razor-claw`:
+      return `Garra Afilada`;
+    case `ancient-power`:
+      return `Poder Pasado`;
+    case 1:
+      return `hembra`;
+    default:
+      return ``;
+  }
+}
+
+// Crear la tarjeta de un pokemon entera y añadirla al contenedor
+async function addPokemonEnCadenaEv(datos, contenedorSuperior, contenedorFila) {
 
   // Obtenemos el contenedor que contiene varios pokemon de una fase evolutiva
   const contenedorSubconjunto = document.getElementById(`contenido-FaseEvolucion`);
 
+  if (contenedorSubconjunto !== null) {
+    contenedorFila.appendChild(contenedorSuperior);
+  }
+
   // Creamos contenedor del pokemon
-  let contenedor = document.createElement(`div`);
-  contenedor.className = `elemento-cadena contenedor-elemento elemento-animado`;
+  let tarjeta = document.createElement(`div`);
+  tarjeta.className = `elemento-cadena contenedor-elemento elemento-animado`;
 
   // Calculamos el string adaptado a 3 cifras del número del pokémon
   let numeroPokemon = String(datos.id).padStart(3, `0`);
@@ -282,7 +456,7 @@ async function addPokemonEnCadenaEv(datos) {
   // La hacemos clickeable
   urlImagen.appendChild(imagen);
   // Añadir enlace/imagen al elemento
-  contenedor.appendChild(urlImagen);
+  tarjeta.appendChild(urlImagen);
 
 
   // Creamos el contenedor del nombre
@@ -291,7 +465,7 @@ async function addPokemonEnCadenaEv(datos) {
   nombre.textContent = datos.name.charAt(0).toUpperCase() + datos.name.slice(1);
   nombre.classList = `contenedor-nombre`;
   // Lo añadimos 
-  contenedor.appendChild(nombre);
+  tarjeta.appendChild(nombre);
 
   // Creamos el contenedor del número
   let numero = document.createElement(`div`);
@@ -299,7 +473,14 @@ async function addPokemonEnCadenaEv(datos) {
   numero.textContent = `Nº ` + numeroPokemon;
   numero.classList = `contenedor-numero`;
   // Lo añadimos 
-  contenedor.appendChild(numero);
+  tarjeta.appendChild(numero);
+
+  if(nombre.textContent === document.title)
+  {
+    nombre.id=`PokemonSeleccionado`;
+    numero.id=`PokemonSeleccionadoNumero`;
+  }
+
 
   // Obtenemos los datos de la API donde salen los tipos
   const datosTipos = await traerPokemon(datos.id);
@@ -324,9 +505,9 @@ async function addPokemonEnCadenaEv(datos) {
   // Añadir contenedor de tipo 1 a Tipos
   divTipos.appendChild(divTipo1);
   // Añadir tipo 1 a las clase del elemento
-  contenedor.classList.add(textoTipo1.textContent + `t1`);
+  tarjeta.classList.add(textoTipo1.textContent + `t1`);
   // Añadimos tipo 2 a las clase del elemento como si fuera nulo (por si no tiene)
-  contenedor.classList.add(`nullt2`);
+  tarjeta.classList.add(`nullt2`);
 
   // Añadir si tiene segundo tipo
   if (datosTipos.types[1] != null) {
@@ -346,24 +527,17 @@ async function addPokemonEnCadenaEv(datos) {
     // Añadir contenedor de tipo 2 a Tipos
     divTipos.appendChild(divTipo2);
     // Añadir tipo 2 a las clase del elemento
-    contenedor.classList.add(textoTipo2.textContent + `t2`);
+    tarjeta.classList.add(textoTipo2.textContent + `t2`);
   }
 
   // Añadir contenedor de los tipos al elemento
-  contenedor.appendChild(divTipos);
+  tarjeta.appendChild(divTipos);
 
-  // Si se ha creado el conjunto, se añade el pokémon ahí
-  if (contenedorSubconjunto !== null) {
-    // Añadimos al subcontenedor el pokemon
-    contenedorSubconjunto.appendChild(contenedor);
-  }
-  // Sino el caso normal
-  else {
-    // Añadimos el contenedor del pokemon al contenedor de la cadena
-    contenedorCadenaEv.appendChild(contenedor);
-  }
+  // Añadir tarjeta al contenedor
+  contenedorSuperior.appendChild(tarjeta);
 
-  elementosAnimados = document.querySelectorAll(`.elemento-animado`); // Actualizar lista para las animaciones
+  // Actualizar lista para las animaciones
+  elementosAnimados = document.querySelectorAll(`.elemento-animado`);
 
   // Establecer animaciones a los elementos de la lista
   elementosAnimados.forEach(elemento => {

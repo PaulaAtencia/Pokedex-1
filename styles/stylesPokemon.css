@@ -15,14 +15,22 @@ header a {
     }
 }
 
+#PokemonSeleccionado, 
+#PokemonSeleccionadoNumero{
+    color: #869513 !important;
+}
+
 body.modo-claro {
-    background-image:url(/Pokedex-1-main/images/fondoClaroPokemon.jpg);
+    background-image: url(../images/fondoClaroPokemon.jpg);
 }
 
 body.modo-oscuro {
-    background-image: url(/Pokedex-1-main/images/fondoOscuroPokemon.jpg);
+    background-image: url(../images/fondoOscuroPokemon.jpg);
 
-    .evolucionInfo {
+    .evolucionInfoBoton,
+    #info-MetodoEvolucion,
+    .subContenedor-InfoEv,
+    .auxInfo-MetEv {
         color: #FFFFFF;
         box-shadow: 0 0 10px rgba(255, 255, 255, 1);
         border: 2px solid #FFFFFF;
@@ -30,16 +38,17 @@ body.modo-oscuro {
     }
 
     #titulo-cadenaEvolutiva,
-    .nombre_estadistica,
-    .valor_estadistica,
-    .stat
-    #total-stats,
     #pokemonInfoContainer,
     #pokemonStats,
+    .stat,
+    .nombre_estadistica,
+    .valor_estadistica,
+    #titulo-infoMetodoEv,
+    #total-stats,
     h3 {
         color: #FFFFFF;
-        background-color: #000000;
     }
+
 }
 
 h3 {
@@ -54,52 +63,57 @@ h3 {
 }
 
 #pokemonInfoContainer {
+    padding: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+
     font-family: "Mermaid";
     font-size: 18px;
-display: flex;
-    margin: 30px;
-    margin-inline-start: 40%;
+    margin: 30px auto;
+    
     flex-wrap: nowrap;
     color: #000000;
     box-shadow: 0 0 10px rgba(0, 0, 0, 1);
     border: 2px solid #000000;
     border-radius: 20px;
-    width:fit-content;
+    max-width: 400px;
     height: auto;
     background-color: #FFFFFF;
     text-align: center;
 }
 
 #pokemonStats {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+
     font-family: "Mermaid";
     font-size: 18px;
-    display: flex;
-    flex-direction:row;
-    align-items:end;
-    flex-wrap: wrap;
+    align-items: end;
     color: #000000;
     box-shadow: 0 0 10px rgba(0, 0, 0, 1);
     border: 2px solid #000000;
     border-radius: 20px;
     width:fit-content;
     background-color: #FFFFFF;
-    
-    
 }
 
 .stat {
+    width: 120px;
     display: flex;
     flex-direction: row;
     margin: 40px; /* Espacio entre cada estadística */
-    width: auto;
+    /*width: auto;*/
     align-items: center;
     align-content: center;
 }
 
 .barra_valor {
     display: flex;
-    flex-direction: row;
-    align-items:center;
+    flex-direction: column;
+    align-items: center;
     width: 120px; /* Ancho de la barra y el valor */
 }
 
@@ -109,6 +123,8 @@ display: flex;
     background-color: blue; /* Color de la barra */
     margin-bottom: 5px;
     align-self: center;
+    flex-direction: row;
+    align-items: center;
 }
 
 .nombre_estadistica {
@@ -133,6 +149,8 @@ display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
+    margin-top: 50px;
+    flex-wrap: wrap;
 }
 
 /* Contiene los pokemons de la cadena evolutiva */
@@ -140,6 +158,8 @@ display: flex;
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-direction: row;
+    flex-wrap: wrap;
 }
 
 /* Contiene los pokemons de una misma "fase" evolutiva */
@@ -152,12 +172,28 @@ display: flex;
     flex-wrap: wrap;
 }
 
+.contenido-FilaFaseEv {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+    margin: 30px;
+    flex-wrap: wrap;
+}
+
 /* Estilo del título de la cadena evolutiva */
 #titulo-cadenaEvolutiva {
     font-family: "Mermaid";
     font-size: 28px;
     color: #000000;
     margin-bottom: 30px;
+}
+
+.contenedor-flechaConTarjeta {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    flex-wrap: wrap;
 }
 
 /* Flecha roja que indice la evolución de un pokémon a otro */
@@ -171,7 +207,7 @@ display: flex;
 }
 
 /* Estilo del texto de información de la evolución */
-.evolucionInfo {
+.evolucionInfoBoton {
     margin-top: 10px;
     font-family: "Mermaid";
     font-size: 18px;
@@ -185,6 +221,51 @@ display: flex;
     display: flex;
     align-items: center;
     justify-content: center;
+    cursor: pointer;
+}
+
+/* Tarjeta donde aparece la información de cómo realizar esa evolución */
+#info-MetodoEvolucion,
+.subContenedor-InfoEv,
+.auxInfo-MetEv {
+    font-family: "Mermaid";
+    font-size: 18px;
+    color: #000000;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 1);
+    border: 2px solid #000000;
+    background-color: #FFFFFF;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    flex-wrap: wrap;
+    padding: 10px;
+    margin: 10px;
+}
+
+#titulo-infoMetodoEv {
+    font-family: "Mermaid";
+    font-size: 28px;
+    color: #000000;
+    margin-top: 30px;
+    margin-bottom: 10px;
+}
+
+@media screen and (max-width: 1000px) {
+    #contenido-cadenaEvolutiva {
+        flex-direction: column;
+    }
+    .contenedor-flechaConTarjeta{
+        flex-direction: column;
+    }
+    #contenido-FaseEvolucion {
+        flex-direction: row;
+    }
+    .contenido-FilaFaseEv {
+        flex-direction: column;
+    }
+
 }
 
 @media screen and (max-width: 1100px) {
@@ -214,6 +295,8 @@ display: flex;
         /* Máximo 3 elementos por fila */
     }
 }
+
+
 
 @media screen and (max-width: 860px) {
     #pokemonStats {
@@ -231,7 +314,6 @@ display: flex;
 @media screen and (max-width: 1100px) {
     #pokemonImagen  {
         width: 300px;
-        height: 250px;
         /* Máximo 3 elementos por fila */
     }
 }
@@ -239,13 +321,11 @@ display: flex;
 @media screen and (max-width: 860px) {
     #pokemonImagen  {
         width: 200px;
-        height: 150px;
         /* Máximo 2 elementos por fila */
     }
 }
 @media screen and (max-width: 620px) {
     #pokemonImagen {
         width: 150px;
-        height: 100px;
     }
 }
